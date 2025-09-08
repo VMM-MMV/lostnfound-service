@@ -1,4 +1,4 @@
-## **7. Lost & Found Service**
+## **Lost & Found Service**
 
 A digital bulletin board for items lost or found in the university.
 

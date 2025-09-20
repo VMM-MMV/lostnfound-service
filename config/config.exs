@@ -11,6 +11,9 @@ config :myapp,
   ecto_repos: [Myapp.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :myapp, Myapp.Repo,
+  adapter: Ecto.Adapters.Postgres
+
 # Configures the endpoint
 config :myapp, MyappWeb.Endpoint,
   url: [host: "localhost"],

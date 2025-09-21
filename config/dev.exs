@@ -3,12 +3,12 @@ import Config
 # Configure your database
 config :myapp, Myapp.Repo,
   username: "postgres",
-  password: "password",
+  password: "postgres",
   hostname: "localhost",
-  database: "lostnfound_dev",
+  database: "myapp_dev",
+  pool_size: 10,
   stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -23,7 +23,7 @@ config :myapp, MyappWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "Z+B3eIkmxHX5tGELV5JPhjUpnA4MvlZBk9sflyzBal4K33Gtk9QovDOSkj1S2F6+",
+  secret_key_base: "HlHbA5cx41iL+4iyebHFUa5eOJCGnzcntI6QXoIpGbunbfO5vaL8d3dbi0fLn6OC",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:myapp, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:myapp, ~w(--watch)]}

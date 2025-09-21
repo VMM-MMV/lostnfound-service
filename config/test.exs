@@ -6,7 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :myapp, Myapp.Repo,
-  database: Path.expand("../myapp_test.db", __DIR__),
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "myapp_test",
   pool_size: 5,
   pool: Ecto.Adapters.SQL.Sandbox
 
@@ -14,7 +17,7 @@ config :myapp, Myapp.Repo,
 # you can enable the server option below.
 config :myapp, MyappWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "3YiNWQWLKFJfZhX26uARf3PRQ/I9LckoH9+aRFuIMXyHUKZSJU177VuaJKkddB9U",
+  secret_key_base: "NX2Pg2HPP9UP8MmzaZaXQaX9aqWwHDmGeYRnx3P3AudLMtNwrNPoldlM3tBtRFLS",
   server: false
 
 # In test we don't send emails

@@ -2,6 +2,6 @@ defmodule MyappWeb.PageController do
   use MyappWeb, :controller
 
   def home(conn, _params) do
-    render(conn, :home)
+    text(conn, "Hello World")
   end
 end

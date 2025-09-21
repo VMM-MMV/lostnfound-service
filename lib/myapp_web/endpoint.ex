@@ -7,7 +7,7 @@ defmodule MyappWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_myapp_key",
-    signing_salt: "eMYL5r3m",
+    signing_salt: "KgKuf0yj",
     same_site: "Lax"
   ]
 
@@ -15,7 +15,7 @@ defmodule MyappWeb.Endpoint do
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
 
-  socket "/ws", MyappWeb.UserSocket,
+  socket "/ws/lostnfound", MyappWeb.UserSocket,
     websocket: true,
     longpoll: false
 

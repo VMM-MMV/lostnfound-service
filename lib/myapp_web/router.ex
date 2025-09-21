@@ -14,10 +14,22 @@ defmodule MyappWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do
+    plug MyappWeb.Plugs.AuthPlug
+  end
+
   scope "/", MyappWeb do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
+
+  scope "/api", MyappWeb do
+    pipe_through [:api, :api_auth]
+
+    get "/lostnfound", LostnfoundController, :show
+    post "/lostnfound", LostnfoundController, :create
+    patch "/lostnfound/:id", LostnfoundController, :update
   end
 
   # Other scopes may use custom stacks.

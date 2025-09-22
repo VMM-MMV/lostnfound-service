@@ -6,19 +6,17 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - DATABASE_URL=ecto://postgres:postgres@db/myapp_dev
-      - PHOENIX_HOST=localhost
-      - SECRET_KEY_BASE=dummy
-      - PHX_SERVER=true
+      DATABASE_URL: ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}
+      PHOENIX_HOST: ${PHOENIX_HOST}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      PHX_SERVER: ${PHX_SERVER}
     depends_on:
       - db
   db:
     image: postgres:14
     restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=myapp_dev
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:

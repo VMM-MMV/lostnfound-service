@@ -24,10 +24,10 @@ config :myapp, MyappWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "HlHbA5cx41iL+4iyebHFUa5eOJCGnzcntI6QXoIpGbunbfO5vaL8d3dbi0fLn6OC",
-  watchers: [
-    esbuild: {Esbuild, :install_and_run, [:myapp, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:myapp, ~w(--watch)]}
-  ]
+  watchers: []
+
+# JWT secret for test token generation
+config :consumables_service, :jwt_secret, "secret"
 
 # ## SSL Support
 #

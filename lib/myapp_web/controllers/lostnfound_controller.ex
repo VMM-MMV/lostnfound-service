@@ -21,7 +21,7 @@ defmodule MyappWeb.LostnfoundController do
   end
 
   def update(conn, %{"id" => id, "status" => status}) do
-    post = Lostnfound.get_post_by_user_id!(id)
+    post = Lostnfound.get_post!(id)
 
     if post.user_id != conn.assigns.user_id do
       conn

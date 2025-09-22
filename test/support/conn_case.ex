@@ -17,6 +17,11 @@ defmodule MyappWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  import Phoenix.ConnTest, only: [json_response: 2, post: 3]
+  import Plug.Conn, only: [put_req_header: 3]
+
+  @endpoint MyappWeb.Endpoint
+
   using do
     quote do
       # The default endpoint for testing
@@ -34,5 +39,27 @@ defmodule MyappWeb.ConnCase do
   setup tags do
     Myapp.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  @doc """
+  Builds a conn with an Authorization header containing a JWT token for the given user_id.
+  """
+  def build_auth_conn(conn, user_id) do
+    # Use the TokenController to generate a token
+    token_conn =
+      post(conn, "/api/token", %{"user_id" => user_id})
+      |> json_response(200)
+
+    token = token_conn["token"]
+
+    put_req_header(conn, "authorization", "Bearer #{token}")
+  end
+
+  @doc """
+  Asserts that a given key in a JSON response satisfies a predicate.
+  """
+  def assert_in_json_response(conn, status, key, predicate) do
+    assert %{^key => value} = json_response(conn, status)
+    assert predicate.(value)
   end
 end

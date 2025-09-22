@@ -25,6 +25,11 @@ defmodule MyappWeb.Router do
   end
 
   scope "/api", MyappWeb do
+    pipe_through :api
+    post "/token", TokenController, :generate_token
+  end
+
+  scope "/api", MyappWeb do
     pipe_through [:api, :api_auth]
 
     get "/lostnfound", LostnfoundController, :show

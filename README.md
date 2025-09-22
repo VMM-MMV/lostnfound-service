@@ -1,77 +1,157 @@
-## **Budgeting Service**
 
-Tracks FAF Cab finances, including donations, expenses, and user debts.
+## **Lost & Found Service**
+
+A digital bulletin board for items lost or found in the university.
 
 ### **Responsibilities**
 
-- Maintain a transparent log of all financial transactions.
-- Manage a debt book for users who damage property.
-- Provide financial reports.
+- Allow users to create, update, and comment on posts.
+- Mark posts as "resolved."
 
 ### **Endpoints**
 
-**Get Budget Logs**
+**Create a Post**
 
-- `GET /api/budget`
-
-  - **Description:** Returns the current budget.
-
-- `GET /api/budget/logs`
-
-  - **Description:** Returns all budget logs.
-
-- `GET /api/budget/logs?csv=true`
-
-  - **Description:** Returns a CSV report of budget logs. This endpoint is only accessible to admins.
-
-**Record a Transaction**
-
-- `POST /api/budget`
-
-  - **Description:** Adds a new financial transaction to the budget. This endpoint is only accessible to admins.
+- `POST /api/lostnfound`
+  - **Description:** Creates a new post for a lost or found item.
+  - **Headers:** `Authorization: Bearer <jwt>`
   - **Payload:**
-
     ```json
     {
-      "entity": "user_id or partner name",
-      "affiliation": "FAF/Partner",
-      "amount": -100
+      "user_id": "user-uuid-123",
+      "status": "unresolved",
+      "description": "I lost my will to live in faf cab. Would very grateful if somebody finds it"
     }
     ```
 
-**Add to Debt Book**
+**Update Post Status**
 
-- `POST /api/budget/debt`
-
-  - **Description:** Adds a new debt entry for a user. This endpoint is only accessible to admins.
+- `PATCH /api/lostnfound/{post_id}`
+  - **Description:** Updates the status of a post. Only the creator or an admin can update it.
+  - **Headers:** `Authorization: Bearer <jwt>`
   - **Payload:**
-
     ```json
     {
-      "responsable_id": "user-uuid-123",
-      "creator_id": "admin-uuid-001",
-      "amount": 100
+      "status": "resolved"
     }
     ```
 
-**Get User Debt**
+**WebSocket Connection**
 
-- `GET /api/budget/debt`
+- `wss://api.faf/ws/lostnfound/{post_id}?token=<JWT>`
+  - **Description:** Establishes a WebSocket connection for real-time updates and comments on a specific post.
 
-  - **Description:** Retrieves the total debt
-  - **Headers:** `Authorization: Bearer <jwt>` (Admin)
+**Client → Server Events (WebSocket)**
+***General Message Format (all events):***
+    
+   ```json
+   {
+     "topic": "lostnfound:<post_id>",
+     "event": "<event_name>",
+     "payload": { },
+     "ref": "1"
+   }
+   ```
+    
+   -   `topic` → always `lostnfound:<post_id>`
+       
+   -   `event` → the action (`phx_join`, `post_message`, `list_messages`, …)
+       
+   -   `payload` → data sent with the event
+       
+   -   `ref` → client reference number (starts at `"1"`, increments per message)
+   
+**Join a Post Channel**
 
-- `GET /api/budget/debt?responsable_id={id}`
+-   **Event:** `phx_join`
+    
+-   **Payload:**
+    
+    ```json
+    {
+      "topic": "lostnfound:1",
+      "event": "phx_join",
+      "payload": {},
+      "ref": "1"
+    }
+    ```
+    
 
-  - **Description:** Retrieves the debt for a specific user. Accessible by admins or the user themselves.
-  - **Headers:** `Authorization: Bearer <jwt>` (Admin or the user themselves)
+**Post a Message**
 
-**Get Debt Logs**
+-   **Event:** `post_message`
+    
+-   **Payload:**
+    
+    ```json
+    {
+      "topic": "lostnfound:1",
+      "event": "post_message",
+      "payload": {"content": "Test message"},
+      "ref": "2"
+    }
+    ```
+    
 
-- `GET /api/budget/debt/logs`
+**List Messages**
 
-  - **Description:** Returns all debt logs. Accessible only by admins.
+-   **Event:** `list_messages`
+    
+-   **Payload:**
+    
+    ```json
+    {
+      "topic": "lostnfound:1",
+      "event": "list_messages",
+      "payload": {},
+      "ref": "3"
+    }
+    ```
+    
 
-- `GET /api/budget/debt/logs?responsable_id={id}`
+----------
 
-  - **Description:** Returns debt logs for a specific user. Accessible by admins or the user themselves.
+### **Server → Client Broadcasts (WebSocket)**
+
+**Message Posted**
+
+-   **Event:** `post_message`
+    
+-   **Broadcast Payload:**
+    
+    ```json
+    {
+      "type": "post_message",
+      "post_id": "1",
+      "message_id": "msg-uuid-123",
+      "user_id": "user-uuid-456",
+      "content": "Test message",
+      "ts": "2025-09-22T00:00:00Z"
+    }
+    ```
+    
+
+**Message List Response**
+
+-   **Reply to `list_messages`:**
+    
+    ```json
+    {
+      "messages": [
+        {
+          "message_id": "msg-uuid-123",
+          "post_id": "1",
+          "user_id": "user-uuid-456",
+          "content": "First message",
+          "ts": "2025-09-22T00:00:00Z"
+        },
+        {
+          "message_id": "msg-uuid-124",
+          "post_id": "1",
+          "user_id": "user-uuid-789",
+          "content": "Second message",
+          "ts": "2025-09-22T00:05:00Z"
+        }
+      ]
+    }
+    ```

@@ -1,20 +1,30 @@
-
 defmodule MyappWeb.Plugs.AuthPlug do
   import Plug.Conn
+  import Phoenix.Controller
+  alias MyappWeb.Token
 
   def init(opts), do: opts
 
-  @spec call(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def call(conn, _opts) do
-    with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
-         {:ok, %{"user_id" => user_id}} <- MyappWeb.Token.verify_and_validate(token)
-    do
-      assign(conn, :user_id, user_id)
-    else
+    case get_req_header(conn, "authorization") do
+      ["Bearer " <> token] ->
+        case Token.verify_and_validate(token) do
+          {:ok, %{"user_id" => user_id}} ->
+            assign(conn, :user_id, user_id)
+
+          _ ->
+            unauthorized(conn)
+        end
+
       _ ->
-        conn
-        |> put_status(:unauthorized)
-        |> halt()
+        unauthorized(conn)
     end
+  end
+
+  defp unauthorized(conn) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{error: "unauthorized"})
+    |> halt()
   end
 end

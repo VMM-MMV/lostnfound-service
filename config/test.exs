@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :myapp, Myapp.Repo,
-  username: System.get_env("POSTGRES_USER"),
-  password: System.get_env("POSTGRES_PASSWORD"),
-  hostname: System.get_env("POSTGRES_HOST"),
-  database: System.get_env("POSTGRES_DB"),
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "myapp_dev",
   pool_size: 5,
   pool: Ecto.Adapters.SQL.Sandbox
 
@@ -35,3 +35,5 @@ config :phoenix, :plug_init_mode, :runtime
 # Enable helpful, but potentially expensive runtime checks
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
+
+config :myapp, :jwt_secret, "secret"

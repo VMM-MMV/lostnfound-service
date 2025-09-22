@@ -16,7 +16,7 @@ config :myapp, MyappWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: MyappWeb.ErrorHTML, json: MyappWeb.ErrorJSON],
+    formats: [json: MyappWeb.ErrorJSON],
     layout: false
   ],
   pubsub_server: Myapp.PubSub,

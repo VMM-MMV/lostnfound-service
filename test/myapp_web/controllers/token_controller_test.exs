@@ -9,6 +9,6 @@ defmodule MyappWeb.TokenControllerTest do
 
   test "creates a JWT token", %{conn: conn} do
     conn = post(conn, "/api/token", %{"user_id" => "test_user_id"})
-    assert json_response(conn, 200)["jwt"]
+    assert json_response(conn, 200)["token"]
   end
 end

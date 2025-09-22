@@ -3,6 +3,31 @@
 
 A digital bulletin board for items lost or found in the university.
 
+### **Docker**
+
+To set up the environment, create a `.env` file in the **same directory** as your `docker-compose.yml` with the following contents:
+
+```env
+POSTGRES_USER=<POSTGRES_USER>
+POSTGRES_PASSWORD=<POSTGRES_PASSWORD>
+POSTGRES_DB=<POSTGRES_DB>
+POSTGRES_HOST=<POSTGRES_HOST>
+JWT_SECRET=<JWT_SECRET>
+
+PHOENIX_HOST=<PHOENIX_HOST>
+SECRET_KEY_BASE=<SECRET_KEY_BASE>
+PHX_SERVER=true
+```
+
+This file will provide all the necessary environment variables for the Docker containers.
+
+---
+
+### **Docker Hub**
+
+The service is available on Docker Hub:
+[https://hub.docker.com/r/vmmmmv/lostnfound](https://hub.docker.com/r/vmmmmv/lostnfound)
+
 ### **Responsibilities**
 
 - Allow users to create, update, and comment on posts.

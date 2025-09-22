@@ -24,6 +24,7 @@ defmodule Myapp.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Myapp.DataCase
+      import ExMachina.Ecto
     end
   end
 

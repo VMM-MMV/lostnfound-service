@@ -32,7 +32,7 @@ defmodule Myapp.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support", "test/myapp"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -42,7 +42,7 @@ defmodule Myapp.MixProject do
     [
       {:phoenix, "~> 1.8.0"},
       {:phoenix_ecto, "~> 4.5"},
-            {:ecto_sql, "~> 3.13"},
+      {:ecto_sql, "~> 3.13"},
       {:postgrex, "~> 0.19"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -66,7 +66,8 @@ defmodule Myapp.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:joken, "~> 2.5"}
+      {:joken, "~> 2.5"},
+      {:ex_machina, "~> 2.7", only: :test}
     ]
   end
 
